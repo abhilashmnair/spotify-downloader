@@ -3,6 +3,7 @@ import json
 import shutil
 from definitions import *
 from PIL import Image
+from youtube_search import YoutubeSearch
 
 tokenUrl = "https://accounts.spotify.com/api/token"
 headers = {}
@@ -34,8 +35,13 @@ response = requests.get(url=requestUrl, headers=headers)
 #print(json.dumps(response.json(), indent=2))
 
 data = response.json()
-print(get_title(data))
-print(get_artists(data))
+trackTitle = get_title(data)
+trackArtists = get_artists(data)
 print(get_album_artists(data))
 print(get_album_name(data))
 print(get_release_year(data))
+
+results = YoutubeSearch(f"{trackTitle}+{trackArtists}", max_results=10).to_dict()
+
+youtubeSongUrl = 'https://youtube.com/' + str(results[0]['url_suffix'])
+print(youtubeSongUrl)

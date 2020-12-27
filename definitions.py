@@ -32,6 +32,12 @@ def get_artists(data):
 def get_album_name(data):
     return data['album']['name']
 
+def get_track_number(data):
+    return data['track_number']
+
+def get_disc_number(data):
+    return data['disc_number']
+
 def get_release_year(data):
     date = data['album']['release_date']
     year = date.split('-')
