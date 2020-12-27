@@ -22,18 +22,29 @@ r = requests.post(url, headers=headers, data=data)
 
 token = r.json()['access_token']
 
-trackId = '0IHSAULL6jRYaDURDyVY12'
-playlistUrl = f"https://api.spotify.com/v1/tracks/{trackId}"
 headers = {
     "Authorization": "Bearer " + token
 }
 
-response = requests.get(url=playlistUrl, headers=headers)
+userQuery = input('Enter track title and artist / Spotify URL : ')
+
+if 'open.spotify.com' in userQuery:
+    trackId = userQuery.split('/')[4]
+else:
+    query = '+'.join(str(val) for val in userQuery.split(' '))
+    requestUrl = f"https://api.spotify.com/v1/search?q={query}&type=track"
+    response = requests.get(url=requestUrl, headers=headers)
+    data = response.json()
+    trackId = data['tracks']['items'][0]['id']
+
+requestUrl = f"https://api.spotify.com/v1/tracks/{trackId}"
+
+response = requests.get(url=requestUrl, headers=headers)
 #print(json.dumps(response.json(), indent=2))
 
 data = response.json()
-artists = get_artists(data)
-for item in artists:
-    print(item)
-
-rawAlbumArt = urlopen(get_album_art(data)).read()
+print(get_title(data))
+print(get_artists(data))
+print(get_album_artists(data))
+print(get_album_name(data))
+print(get_release_year(data))
