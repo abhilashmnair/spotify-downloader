@@ -33,8 +33,9 @@ headers = {
 response = requests.get(url=playlistUrl, headers=headers)
 #print(json.dumps(response.json(), indent=2))
 
-data = response.json()
-#print(data)
-artist = data['album']['artists']
-for item in artist:
-    print(item['name'])
+def get_artists(data):
+    artists = data['album']['artists']
+    for item in artists:
+        print(item['name'])
+
+print(response)
