@@ -1,4 +1,13 @@
 from datetime import datetime
+from urllib.request import urlopen
+from secrets import *
+import base64
+
+def generate_code():
+    message = f"{clientId}:{clientSecret}"
+    messageBytes = message.encode('ascii')
+    base64Bytes = base64.b64encode(messageBytes)
+    return base64Bytes.decode('ascii')
 
 def get_album_art(data):
     imageUrl = data['album']['images'][0]['url']
@@ -27,5 +36,3 @@ def get_release_year(data):
     date = data['album']['release_date']
     year = date.split('-')
     return year[0]
-
-

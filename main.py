@@ -1,30 +1,21 @@
 import requests
-import base64
 import json
-from secrets import *
+import shutil
 from definitions import *
-from urllib.request import urlopen
+from PIL import Image
 
-url = "https://accounts.spotify.com/api/token"
+tokenUrl = "https://accounts.spotify.com/api/token"
 headers = {}
 data = {}
 
-message = f"{clientId}:{clientSecret}"
-messageBytes = message.encode('ascii')
-base64Bytes = base64.b64encode(messageBytes)
-base64Message = base64Bytes.decode('ascii')
-
-
-headers['Authorization'] = f"Basic {base64Message}"
+headers['Authorization'] = f"Basic {generate_code()}"
 data['grant_type'] = "client_credentials"
 
-r = requests.post(url, headers=headers, data=data)
+r = requests.post(tokenUrl, headers=headers, data=data)
 
 token = r.json()['access_token']
 
-headers = {
-    "Authorization": "Bearer " + token
-}
+headers = { "Authorization": "Bearer " + token }
 
 userQuery = input('Enter track title and artist / Spotify URL : ')
 
