@@ -2,13 +2,13 @@ import requests
 import base64
 import json
 from secrets import *
+from definitions import *
+from urllib.request import urlopen
 
-# Step 1 - Authorization 
 url = "https://accounts.spotify.com/api/token"
 headers = {}
 data = {}
 
-# Encode as Base64
 message = f"{clientId}:{clientSecret}"
 messageBytes = message.encode('ascii')
 base64Bytes = base64.b64encode(messageBytes)
@@ -22,8 +22,6 @@ r = requests.post(url, headers=headers, data=data)
 
 token = r.json()['access_token']
 
-# Step 2 - Use Access Token to call playlist endpoint
-
 trackId = '0IHSAULL6jRYaDURDyVY12'
 playlistUrl = f"https://api.spotify.com/v1/tracks/{trackId}"
 headers = {
@@ -33,9 +31,9 @@ headers = {
 response = requests.get(url=playlistUrl, headers=headers)
 #print(json.dumps(response.json(), indent=2))
 
-def get_artists(data):
-    artists = data['album']['artists']
-    for item in artists:
-        print(item['name'])
+data = response.json()
+artists = get_artists(data)
+for item in artists:
+    print(item)
 
-print(response)
+rawAlbumArt = urlopen(get_album_art(data)).read()
