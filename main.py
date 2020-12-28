@@ -1,9 +1,12 @@
+import asyncio
 import requests
 import json
 import shutil
 from definitions import *
+from os.path import join, exists
 from PIL import Image
 from youtube_search import YoutubeSearch
+from pytube import YouTube
 
 tokenUrl = "https://accounts.spotify.com/api/token"
 headers = {}
@@ -32,7 +35,6 @@ else:
 requestUrl = f"https://api.spotify.com/v1/tracks/{trackId}"
 
 response = requests.get(url=requestUrl, headers=headers)
-#print(json.dumps(response.json(), indent=2))
 
 data = response.json()
 trackTitle = get_title(data)
@@ -44,4 +46,25 @@ print(get_release_year(data))
 results = YoutubeSearch(f"{trackTitle}+{trackArtists}", max_results=10).to_dict()
 
 youtubeSongUrl = 'https://youtube.com/' + str(results[0]['url_suffix'])
-print(youtubeSongUrl)
+
+convertedFileName = f'{trackArtists} - {trackTitle}'
+convertedFilePath = join('.', convertedFileName) + '.mp3'
+
+yt = YouTube(youtubeSongUrl)
+trackAudioStream = yt.streams.get_audio_only()
+
+downloadedFilePath = trackAudioStream.download(output_path='./Temp',filename=convertedFileName,skip_existing=False)
+
+if downloadedFilePath is None:
+    return 'Download Error'
+
+command = 'ffmpeg -v quiet -y -i "%s" -acodec libmp3lame -abr true ' \
+          '-af "apad=pad_dur=2, dynaudnorm, loudnorm=I=-17" "%s"'
+formattedCommand = command % (downloadedFilePath, convertedFilePath)
+process = await asyncio.subprocess.create_subprocess_shell(formattedCommand)
+_ = await process.communicate()
+
+while True:
+    if exists(convertedFilePath):
+        break
+
