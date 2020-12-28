@@ -52,16 +52,16 @@ def downloadViaSpotify(headers,trackId):
     convertedFilePath = join('.',convertedFileName) + '.mp3'
 
     if exists(convertedFilePath):
-        print('Already exists!')
-        return None
-
-    print('\nDownloading...')
+        print('\nAlready downloaded!')
+        quit()
+    else:
+        print('\nDownloading...')
     
-    yt = YouTube(youtubeSongUrl)
-    downloadedFilePath = yt.streams.get_audio_only().download(filename=convertedFileName,skip_existing=False)
+        yt = YouTube(youtubeSongUrl)
+        downloadedFilePath = yt.streams.get_audio_only().download(filename=convertedFileName,skip_existing=False)
 
-    print('\nDownloaded file location : ' + str(os.getcwd()))
-    return convertedFilePath,downloadedFilePath,data
+        print('\nDownloaded file location : ' + str(os.getcwd()))
+        return convertedFilePath,downloadedFilePath,data
 
 def saveMP3(downloadedFilePath,convertedFilePath,data):
     #FFMPEG Conversion
@@ -89,7 +89,6 @@ def saveMP3(downloadedFilePath,convertedFilePath,data):
     remove(downloadedFilePath)
 
 #Main program
-
 userQuery = input('Enter track title and artist / Spotify URL : ')
 trackId = search_song(userQuery)
 
@@ -100,3 +99,5 @@ else:
     convertedFilePath,downloadedFilePath,data = downloadViaSpotify(headers,trackId)
 
 saveMP3(downloadedFilePath,convertedFilePath,data)
+print('\n---------------------------------------------------------------------------')
+print('\nHappy Hearing')
