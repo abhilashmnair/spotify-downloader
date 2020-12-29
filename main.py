@@ -2,13 +2,15 @@ import requests
 import json
 import os
 from definitions import *
-from config import *
+from args import bitrate
 from os.path import join, exists
 from os import mkdir, remove
 from mutagen.easyid3 import EasyID3, ID3
 from mutagen.id3 import APIC as AlbumCover
+from mutagen.id3 import USLT
 from youtube_search import YoutubeSearch
 from pytube import YouTube
+from bs4 import BeautifulSoup
 
 tokenUrl = "https://accounts.spotify.com/api/token"
 headers = {}
@@ -104,10 +106,25 @@ def saveMP3(downloadedFilePath,convertedFilePath,data):
     audioFile['album'] = get_album_name(data)
     audioFile['albumartist'] = get_album_artists(data)
     audioFile['originaldate'] = str(get_release_year(data))
+
+    lyricsUrl = f'https://genius.com{getLyricsUrl(get_title(data),get_album_artists(data))}'
+
+    response = requests.get(lyricsUrl)
+    webpage = response.content
+
+    soup = BeautifulSoup(webpage, 'html.parser')
+    songLyrics = ''
+
+    for div in soup.findAll('div', attrs = {'class': 'lyrics'}):
+        songLyrics = ''.join((songLyrics, div.text.strip()))
+    
     audioFile.save(v2_version=3)
 
     #Saving AlbumArt
     audioFile = ID3(convertedFilePath)
+    if songLyrics is not None:
+        uslt_output = USLT(encoding=3, lang=u'eng', desc=u'desc', text=songLyrics)
+        audioFile["USLT::'eng'"] = uslt_output
     audioFile['APIC'] = AlbumCover(encoding=3,mime='image/jpeg',type=3,desc='Album Art',data=get_album_art(data))
     audioFile.save(v2_version=3)
 

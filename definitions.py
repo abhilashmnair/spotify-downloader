@@ -1,7 +1,9 @@
 from datetime import datetime
 from urllib.request import urlopen
 from args import *
+import json
 import base64
+import requests
 
 def generate_code():
     message = f"{clientId}:{clientSecret}"
@@ -42,3 +44,13 @@ def get_release_year(data):
     date = data['album']['release_date']
     year = date.split('-')
     return year[0]
+
+def getLyricsUrl(title,artists):
+    url = f'https://api.genius.com/search?q={title}+{artists}&access_token={geniusToken}'
+    response = requests.get(url)
+    data = response.json()
+    try:
+        lyricsUrl = data['response']['hits'][0]['result']['path']
+        return lyricsUrl
+    except IndexError:
+        print('Lyrics not found. Skipping...')
