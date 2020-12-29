@@ -10,7 +10,7 @@ Make sure [FFMPEG](https://ffmpeg.org/download.html) is installed and added to E
 ## How to use
 ```pip install -r requirements.txt```
 
-Add your Spotify credentials to the config file (optional: Set your bitrate)
+Add your Spotify credentials to the args.py file (optional: Set your bitrate)
 
 Provide the URL or query
 
