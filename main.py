@@ -2,7 +2,7 @@ import requests
 import json
 import os
 from definitions import *
-from config import *
+from args import *
 from os.path import join, exists
 from os import mkdir, remove
 from mutagen.easyid3 import EasyID3, ID3
