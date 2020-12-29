@@ -1,8 +1,8 @@
-# Spotify Downloader🎧
+## Spotify Downloader🎧
 
 Downloads songs using Spotify URL or user query.
 
-Adds metadata to the songs.
+Adds metadata to the songs obtained from Spotify database
 
 ## Prerequisites
 Make sure [FFMPEG](https://ffmpeg.org/download.html) is installed and added to Environmental Variables Path
