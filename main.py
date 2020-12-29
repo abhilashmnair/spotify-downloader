@@ -2,6 +2,7 @@ import requests
 import json
 import os
 from definitions import *
+from config import *
 from os.path import join, exists
 from os import mkdir, remove
 from mutagen.easyid3 import EasyID3, ID3
@@ -59,13 +60,38 @@ def downloadViaSpotify(headers,trackId):
     
         yt = YouTube(youtubeSongUrl)
         downloadedFilePath = yt.streams.get_audio_only().download(filename=convertedFileName,skip_existing=False)
-
-        print('\nDownloaded file location : ' + str(os.getcwd()))
         return convertedFilePath,downloadedFilePath,data
 
+def downloadFromYoutube(q):
+    results = YoutubeSearch(q, max_results=10).to_dict()
+    youtubeSongUrl = 'https://youtube.com/' + str(results[0]['url_suffix'])
+    trackTitle =  results[0]['title']
+
+    convertedFilePath = join('.',trackTitle) + '.mp3'
+
+    if exists(convertedFilePath):
+        print('\nAlready downloaded!')
+        quit()
+    else:
+        print('\nDownloading...')
+    
+        yt = YouTube(youtubeSongUrl)
+        downloadedFilePath = yt.streams.get_audio_only().download(filename=trackTitle,skip_existing=False)
+        print(f'Conerting to mp3 with {bitrate}kpbs bitrate..')
+        command = f'ffmpeg -v quiet -y -i "{downloadedFilePath}" -acodec libmp3lame -abr true -af "apad=pad_dur=2" -vn -sn -dn -b:a {bitrate}k "{convertedFilePath}"'
+        os.system(command)
+
+        audioFile = EasyID3(convertedFilePath)
+        audioFile.delete()
+        audioFile['title'] = trackTitle
+        audioFile.save(v2_version=3)
+        remove(downloadedFilePath)
+
 def saveMP3(downloadedFilePath,convertedFilePath,data):
+
+    print(f'Conerting to mp3 with {bitrate}kpbs bitrate..')
     #FFMPEG Conversion
-    command = f'ffmpeg -v quiet -y -i "{downloadedFilePath}" -acodec libmp3lame -abr true -af "apad=pad_dur=2" -vn -sn -dn -b:a 328k "{convertedFilePath}"'
+    command = f'ffmpeg -v quiet -y -i "{downloadedFilePath}" -acodec libmp3lame -abr true -af "apad=pad_dur=2" -vn -sn -dn -b:a {bitrate}k "{convertedFilePath}"'
     os.system(command)
 
     audioFile = EasyID3(convertedFilePath)
@@ -94,10 +120,11 @@ trackId = search_song(userQuery)
 
 if trackId is None:
     print('Song not found in Spotify Database! Searching in YouTube...')
-    #downloadFromYoutube(userQuery)
+    downloadFromYoutube(userQuery)
 else:
     convertedFilePath,downloadedFilePath,data = downloadViaSpotify(headers,trackId)
+    saveMP3(downloadedFilePath,convertedFilePath,data)
 
-saveMP3(downloadedFilePath,convertedFilePath,data)
+print(f'\nSaved in current directory.')
 print('\n---------------------------------------------------------------------------')
 print('\nHappy Hearing')

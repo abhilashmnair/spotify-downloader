@@ -1,6 +1,6 @@
 from datetime import datetime
 from urllib.request import urlopen
-from secrets import *
+from config import *
 import base64
 
 def generate_code():
