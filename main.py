@@ -107,6 +107,7 @@ def saveMP3(downloadedFilePath,convertedFilePath,data):
     audioFile['albumartist'] = get_album_artists(data)
     audioFile['originaldate'] = str(get_release_year(data))
 
+    #Fetch lyrics from Genius
     lyricsUrl = f'https://genius.com{getLyricsUrl(get_title(data),get_album_artists(data))}'
 
     response = requests.get(lyricsUrl)
