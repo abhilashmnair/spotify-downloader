@@ -1,8 +1,8 @@
-# Spotify Downloader🎧
+## Spotify Downloader. 🎧
 
 Downloads songs using Spotify URL or user query.
 
-Adds metadata to the songs.
+Adds metadata to the songs obtained from Spotify database
 
 ## Prerequisites
 Make sure [FFMPEG](https://ffmpeg.org/download.html) is installed and added to Environmental Variables Path
@@ -10,7 +10,9 @@ Make sure [FFMPEG](https://ffmpeg.org/download.html) is installed and added to E
 ## How to use
 ```pip install -r requirements.txt```
 
-Add your Spotify credentials to the args.py file (optional: Set your bitrate)
+Get your [Spotify Credentials](https://developer.spotify.com) and [Genius Token](https://genius.com/developers).
+
+Add your Spotify and Genius credentials to args.py file (optional: Set your bitrate)
 
 Provide the URL or query
 
