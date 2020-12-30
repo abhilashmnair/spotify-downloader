@@ -8,12 +8,16 @@ Adds metadata to the songs obtained from Spotify database
 Make sure [FFMPEG](https://ffmpeg.org/download.html) is installed and added to Environmental Variables Path
 
 ## How to use
-```pip install -r requirements.txt```
+* ```pip install -r requirements.txt```
 
-Get your [Spotify Credentials](https://developer.spotify.com) and [Genius Token](https://genius.com/developers).
+* Get your [Spotify Credentials](https://developer.spotify.com) and [Genius Token](https://genius.com/developers).
 
-Add your Spotify and Genius credentials to args.py file (optional: Set your bitrate)
+* Add your Spotify and Genius credentials to args.py file (optional: Set your bitrate)
 
-Provide the URL or query
+* ```py main.py```
+
+* Provide the URL or query
 
 That's it! Your songs will be downloaded in your working directory.
+
+For adding more features or pointing out issues...PR. :v:
