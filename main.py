@@ -142,6 +142,4 @@ else:
     convertedFilePath,downloadedFilePath,data = downloadViaSpotify(headers,trackId)
     saveMP3(downloadedFilePath,convertedFilePath,data)
 
-print(f'\nSaved in current directory.')
-print('\n---------------------------------------------------------------------------')
-print('\nHappy Hearing')
+print(f'\nSaved in current directory.\n---\nHappy Hearing!')
