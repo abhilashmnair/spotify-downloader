@@ -4,7 +4,6 @@ import os
 from definitions import *
 from args import *
 from os.path import join, exists
-from os import mkdir, remove
 from mutagen.easyid3 import EasyID3, ID3
 from mutagen.id3 import APIC as AlbumCover
 from mutagen.id3 import USLT
@@ -126,7 +125,7 @@ def saveMP3(downloadedFilePath,convertedFilePath,data):
     if songLyrics is not None:
         uslt_output = USLT(encoding=3, lang=u'eng', desc=u'desc', text=songLyrics)
         audioFile["USLT::'eng'"] = uslt_output
-    audioFile['APIC'] = AlbumCover(encoding=3,mime='image/jpeg',type=3,desc='Album Art',data=get_album_art(data))
+    audioFile['APIC'] = AlbumCover(encoding=3, mime='image/jpeg', type=3, desc='Album Art', data=get_album_art(data))
     audioFile.save(v2_version=3)
 
     #remove unwanted YouTube downloads
