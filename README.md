@@ -20,4 +20,6 @@ Make sure [FFMPEG](https://ffmpeg.org/download.html) is installed and added to E
 
 That's it! Your songs will be downloaded in your working directory.
 
+****Note : It uses Youtube Music for downloading mp3 song****
+
 For adding more features or pointing out issues, do a PR. :v:
